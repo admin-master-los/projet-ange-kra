@@ -334,6 +334,40 @@ export function useSupabaseData() {
       throw err;
     }
   };
+  
+  
+// Section 9 - Design & Identité Visuelle
+const saveSection9 = async (data: any) => {
+  if (!project) return;
+
+  try {
+    const { data: section9, error } = await supabase
+      .from('section9_responses')
+      .upsert({
+        project_id: project.id,
+        logo_status: data.logo_status || '',
+        logo_file: data.logo_file || '',
+        logo_url: data.logo_url || '',
+        colors: data.colors || {},
+        fonts: data.fonts || '',
+        brand_guide_url: data.brand_guide_url || '',
+        design_style: data.design_style || '',
+        design_style_other: data.design_style_other || '',
+        preferred_colors: data.preferred_colors || {},
+        visual_references: data.visual_references || []
+      }, {
+        onConflict: 'project_id'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return section9;
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+    throw err;
+  }
+};
 
   // Section 14 - Validation & Prochaines Étapes
   const saveSection14 = async (data: any) => {
@@ -600,6 +634,32 @@ export function useSupabaseData() {
             alert_satisfaction_score: section8Data.alert_satisfaction_score
           };
         }
+        
+        case 9: {
+	  const { data: section9, error } = await supabase
+	    .from('section9_responses')
+	    .select('*')
+	    .eq('project_id', project.id)
+	    .limit(1);
+
+	  if (error) throw error;
+	  if (!section9 || section9.length === 0) return null;
+
+	  const section9Data = section9[0];
+
+	  return {
+	    logo_status: section9Data.logo_status,
+	    logo_file: section9Data.logo_file,
+	    logo_url: section9Data.logo_url,
+	    colors: section9Data.colors,
+	    fonts: section9Data.fonts,
+	    brand_guide_url: section9Data.brand_guide_url,
+	    design_style: section9Data.design_style,
+	    design_style_other: section9Data.design_style_other,
+	    preferred_colors: section9Data.preferred_colors,
+	    visual_references: section9Data.visual_references
+	  };
+	}
 
         case 14: {
           const { data: section14, error } = await supabase
@@ -642,6 +702,7 @@ export function useSupabaseData() {
     saveSection6,
     saveSection7,
     saveSection8,
+    
     saveSection14,
     loadSectionData
   };

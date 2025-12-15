@@ -213,6 +213,36 @@ export interface Section8Response {
   updated_at: string;
 }
 
+export interface Section9Response {
+  id: string;
+  project_id: string;
+  // 9.1 Charte Graphique
+  logo_status: string;
+  logo_file: string;
+  logo_url: string;
+  colors: {
+    primary?: string;
+    secondary?: string;
+    accent?: string;
+  };
+  fonts: string;
+  brand_guide_url: string;
+  // 9.2 Préférences Visuelles
+  design_style: string;
+  design_style_other: string;
+  preferred_colors: {
+    primary?: string;
+    secondary?: string;
+    accent?: string;
+  };
+  visual_references: Array<{
+    url?: string;
+    description?: string;
+  }>;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Section14Response {
   id: string;
   project_id: string;
