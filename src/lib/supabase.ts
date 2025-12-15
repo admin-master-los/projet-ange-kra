@@ -79,6 +79,51 @@ export interface Section3Response {
   updated_at: string;
 }
 
+export interface Section4Response {
+  id: string;
+  project_id: string;
+  // 4.1 Parcours Utilisateur
+  etape1_voit: string;
+  etape1_fait: string;
+  journey_steps: Array<{
+    step: string;
+    description: string;
+    action: string;
+  }>;
+  resultat_final: string;
+  // 4.2 Ton & Ambiance
+  ton_plateforme: string;
+  ton_autre: string;
+  ambiance_keywords: string[];
+  // 4.3 Contexte Local
+  specificites_locales: Record<string, boolean>;
+  langues: string;
+  autres_specificites: string;
+  created_at: string;
+  updated_at: string;
+}
+
+
+export interface Section5Response {
+  id: string;
+  project_id: string;
+  // 5.1 Sources de revenus
+  sources_revenus: Record<string, {
+    checked: boolean;
+    price: string;
+  }>;
+  autre_source_revenus: string;
+  // 5.2 Prix & Accessibilité
+  philosophie_tarifaire: string;
+  budget_moyen_cible: string;
+  // Projections
+  utilisateurs_payants_12mois: string;
+  revenu_mensuel_12mois: string;
+  strategie_croissance: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Section14Response {
   id: string;
   project_id: string;

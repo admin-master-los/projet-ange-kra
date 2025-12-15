@@ -7,6 +7,8 @@ import HomePage from './components/HomePage';
 import Section1 from './components/sections/Section1';
 import Section2 from './components/sections/Section2';
 import Section3 from './components/sections/Section3';
+import Section4 from './components/sections/Section4';
+import Section5 from './components/sections/Section5';
 import Section14 from './components/sections/Section14';
 import ProgressIndicator from './components/ProgressIndicator';
 
@@ -14,8 +16,8 @@ const SECTIONS: Section[] = [
   { id: 1, title: "VISION & OBJECTIFS", component: Section1 },
   { id: 2, title: "INSPIRATION & RÉFÉRENCES", component: Section2 },
   { id: 3, title: "MODULES & FONCTIONNALITÉS", component: Section3 },
-  { id: 4, title: "EXPÉRIENCE UTILISATEUR", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
-  { id: 5, title: "MODÈLE ÉCONOMIQUE", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
+  { id: 4, title: "EXPÉRIENCE UTILISATEUR", component: Section4 },
+  { id: 5, title: "MODÈLE ÉCONOMIQUE", component: Section5 },
   { id: 6, title: "LANCEMENT & PRIORITÉS", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
   { id: 7, title: "RESSOURCES & CONTRAINTES", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
   { id: 8, title: "MESURE DU SUCCÈS", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
@@ -38,6 +40,8 @@ function App() {
     saveSection1,
     saveSection2, 
     saveSection3,
+    saveSection4,
+    saveSection5,
     saveSection14,
     loadSectionData 
   } = useSupabaseData();
@@ -70,7 +74,7 @@ function App() {
     if (!project) return;
     
     try {
-      const sectionsToLoad = [1, 2, 3, 14];
+      const sectionsToLoad = [1, 2, 3, 4, 5, 14];
       const loadedData: FormData = {};
       
       for (const sectionId of sectionsToLoad) {
@@ -107,6 +111,12 @@ function App() {
           break;
         case 3:
           await saveSection3(data);
+          break;
+        case 4:
+          await saveSection4(data);
+          break;
+        case 5:
+          await saveSection5(data);
           break;
         case 14:
           await saveSection14(data);

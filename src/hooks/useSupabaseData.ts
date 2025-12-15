@@ -1,4 +1,4 @@
-// src/hooks/useSupabaseData.ts - VERSION MISE À JOUR
+// src/hooks/useSupabaseData.ts - VERSION COMPLÈTE AVEC SECTION 4
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Project } from '../lib/supabase';
@@ -145,7 +145,7 @@ export function useSupabaseData() {
     }
   };
 
-  // Section 3 - Modules & Fonctionnalités (MISE À JOUR COMPLÈTE)
+  // Section 3 - Modules & Fonctionnalités
   const saveSection3 = async (data: any) => {
     if (!project) return;
 
@@ -154,31 +154,9 @@ export function useSupabaseData() {
         .from('section3_responses')
         .upsert({
           project_id: project.id,
-          // Module A
           module_a_features: data.moduleA?.features || {},
           module_a_other_features: data.moduleA?.otherFeatures || '',
-          // Module B
-          module_b_features: data.moduleB?.features || {},
-          module_b_sources: data.moduleB?.sources || [],
-          module_b_launch_formations: data.moduleB?.launchFormations || '',
-          module_b_avg_duration: data.moduleB?.avgDuration || '',
-          module_b_pricing_model: data.moduleB?.pricingModel || '',
-          // Module C
-          module_c_features: data.moduleC?.features || {},
-          module_c_cvboost_inspiration: data.moduleC?.cvboostInspiration || '',
-          // Module D
-          module_d_features: data.moduleD?.features || {},
-          module_d_partnerships: data.moduleD?.partnerships || '',
-          module_d_partner_count: data.moduleD?.partnerCount || '',
-          // Module E
-          module_e_features: data.moduleE?.features || {},
-          // Module F
-          module_f_features: data.moduleF?.features || {},
-          module_f_gamification_level: data.moduleF?.gamificationLevel || '',
-          // Module G
-          module_g_features: data.moduleG?.features || {},
-          // Fonctionnalités supplémentaires
-          additional_features: data.additionalFeatures || ''
+          module_b_ideas: data.moduleB?.ideas || ''
         }, {
           onConflict: 'project_id'
         })
@@ -187,6 +165,69 @@ export function useSupabaseData() {
 
       if (error) throw error;
       return section3;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+      throw err;
+    }
+  };
+
+  // Section 4 - Expérience Utilisateur
+  const saveSection4 = async (data: any) => {
+    if (!project) return;
+
+    try {
+      const { data: section4, error } = await supabase
+        .from('section4_responses')
+        .upsert({
+          project_id: project.id,
+          etape1_voit: data.etape1_voit || '',
+          etape1_fait: data.etape1_fait || '',
+          journey_steps: data.journeySteps || [],
+          resultat_final: data.resultat_final || '',
+          ton_plateforme: data.ton_plateforme || '',
+          ton_autre: data.ton_autre || '',
+          ambiance_keywords: data.ambiance_keywords || [],
+          specificites_locales: data.specificites_locales || {},
+          langues: data.langues || '',
+          autres_specificites: data.autres_specificites || ''
+        }, {
+          onConflict: 'project_id'
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return section4;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+      throw err;
+    }
+  };
+
+  // Section 5 - Modèle Économique
+  const saveSection5 = async (data: any) => {
+    if (!project) return;
+
+    try {
+      const { data: section5, error } = await supabase
+        .from('section5_responses')
+        .upsert({
+          project_id: project.id,
+          sources_revenus: data.sources_revenus || {},
+          autre_source_revenus: data.autre_source_revenus || '',
+          philosophie_tarifaire: data.philosophie_tarifaire || '',
+          budget_moyen_cible: data.budget_moyen_cible || '',
+          utilisateurs_payants_12mois: data.utilisateurs_payants_12mois || '',
+          revenu_mensuel_12mois: data.revenu_mensuel_12mois || '',
+          strategie_croissance: data.strategie_croissance || ''
+        }, {
+          onConflict: 'project_id'
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return section5;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
       throw err;
@@ -325,32 +366,57 @@ export function useSupabaseData() {
               otherFeatures: section3Data.module_a_other_features
             },
             moduleB: {
-              features: section3Data.module_b_features,
-              sources: section3Data.module_b_sources,
-              launchFormations: section3Data.module_b_launch_formations,
-              avgDuration: section3Data.module_b_avg_duration,
-              pricingModel: section3Data.module_b_pricing_model
-            },
-            moduleC: {
-              features: section3Data.module_c_features,
-              cvboostInspiration: section3Data.module_c_cvboost_inspiration
-            },
-            moduleD: {
-              features: section3Data.module_d_features,
-              partnerships: section3Data.module_d_partnerships,
-              partnerCount: section3Data.module_d_partner_count
-            },
-            moduleE: {
-              features: section3Data.module_e_features
-            },
-            moduleF: {
-              features: section3Data.module_f_features,
-              gamificationLevel: section3Data.module_f_gamification_level
-            },
-            moduleG: {
-              features: section3Data.module_g_features
-            },
-            additionalFeatures: section3Data.additional_features
+              ideas: section3Data.module_b_ideas
+            }
+          };
+        }
+
+        case 4: {
+          const { data: section4, error } = await supabase
+            .from('section4_responses')
+            .select('*')
+            .eq('project_id', project.id)
+            .limit(1);
+
+          if (error) throw error;
+          if (!section4 || section4.length === 0) return null;
+
+          const section4Data = section4[0];
+
+          return {
+            etape1_voit: section4Data.etape1_voit,
+            etape1_fait: section4Data.etape1_fait,
+            journeySteps: section4Data.journey_steps,
+            resultat_final: section4Data.resultat_final,
+            ton_plateforme: section4Data.ton_plateforme,
+            ton_autre: section4Data.ton_autre,
+            ambiance_keywords: section4Data.ambiance_keywords,
+            specificites_locales: section4Data.specificites_locales,
+            langues: section4Data.langues,
+            autres_specificites: section4Data.autres_specificites
+          };
+        }
+
+        case 5: {
+          const { data: section5, error } = await supabase
+            .from('section5_responses')
+            .select('*')
+            .eq('project_id', project.id)
+            .limit(1);
+
+          if (error) throw error;
+          if (!section5 || section5.length === 0) return null;
+
+          const section5Data = section5[0];
+
+          return {
+            sources_revenus: section5Data.sources_revenus,
+            autre_source_revenus: section5Data.autre_source_revenus,
+            philosophie_tarifaire: section5Data.philosophie_tarifaire,
+            budget_moyen_cible: section5Data.budget_moyen_cible,
+            utilisateurs_payants_12mois: section5Data.utilisateurs_payants_12mois,
+            revenu_mensuel_12mois: section5Data.revenu_mensuel_12mois,
+            strategie_croissance: section5Data.strategie_croissance
           };
         }
 
@@ -390,6 +456,8 @@ export function useSupabaseData() {
     saveSection1,
     saveSection2,
     saveSection3,
+    saveSection4,
+    saveSection5,
     saveSection14,
     loadSectionData
   };
