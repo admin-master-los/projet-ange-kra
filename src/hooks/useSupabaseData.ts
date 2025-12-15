@@ -369,6 +369,38 @@ const saveSection9 = async (data: any) => {
   }
 };
 
+   
+// Section 10 - Plateformes & Technologies
+const saveSection10 = async (data: any) => {
+  if (!project) return;
+
+  try {
+    const { data: section10, error } = await supabase
+      .from('section10_responses')
+      .upsert({
+        project_id: project.id,
+        supports: data.supports || [],
+        other_support: data.other_support || '',
+        support_priorities: data.support_priorities || [],
+        integrations: data.integrations || {},
+        other_integration: data.other_integration || '',
+        tech_preferences: data.tech_preferences || '',
+        scalability_needs: data.scalability_needs || '',
+        performance_requirements: data.performance_requirements || ''
+      }, {
+        onConflict: 'project_id'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return section10;
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+    throw err;
+  }
+};
+
   // Section 14 - Validation & Prochaines Étapes
   const saveSection14 = async (data: any) => {
     if (!project) return;
@@ -660,6 +692,30 @@ const saveSection9 = async (data: any) => {
 	    visual_references: section9Data.visual_references
 	  };
 	}
+	
+	case 10: {
+	  const { data: section10, error } = await supabase
+	    .from('section10_responses')
+	    .select('*')
+	    .eq('project_id', project.id)
+	    .limit(1);
+
+	  if (error) throw error;
+	  if (!section10 || section10.length === 0) return null;
+
+	  const section10Data = section10[0];
+
+	  return {
+	    supports: section10Data.supports,
+	    other_support: section10Data.other_support,
+	    support_priorities: section10Data.support_priorities,
+	    integrations: section10Data.integrations,
+	    other_integration: section10Data.other_integration,
+	    tech_preferences: section10Data.tech_preferences,
+	    scalability_needs: section10Data.scalability_needs,
+	    performance_requirements: section10Data.performance_requirements
+	  };
+	}
 
         case 14: {
           const { data: section14, error } = await supabase
@@ -702,7 +758,8 @@ const saveSection9 = async (data: any) => {
     saveSection6,
     saveSection7,
     saveSection8,
-    
+    saveSection9,
+    saveSection10,
     saveSection14,
     loadSectionData
   };

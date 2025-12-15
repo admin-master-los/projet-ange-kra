@@ -243,6 +243,27 @@ export interface Section9Response {
   updated_at: string;
 }
 
+export interface Section10Response {
+  id: string;
+  project_id: string;
+  // 10.1 Supports
+  supports: string[];
+  other_support: string;
+  support_priorities: string[];
+  // 10.2 Intégrations
+  integrations: Record<string, {
+    checked: boolean;
+    detail: string;
+  }>;
+  other_integration: string;
+  // 10.3 Considérations techniques
+  tech_preferences: string;
+  scalability_needs: string;
+  performance_requirements: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Section14Response {
   id: string;
   project_id: string;
