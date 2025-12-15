@@ -190,6 +190,29 @@ export interface Section7Response {
   updated_at: string;
 }
 
+export interface Section8Response {
+  id: string;
+  project_id: string;
+  kpis: Record<string, {
+    checked: boolean;
+    target: string;
+  }>;
+  other_kpi_name: string;
+  other_kpi_target: string;
+  validation_methods: Record<string, {
+    checked: boolean;
+    detail: string;
+  }>;
+  other_validation: string;
+  kpi_frequency: string;
+  kpi_responsible: string;
+  alert_completion_rate: string;
+  alert_retention_rate: string;
+  alert_satisfaction_score: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Section14Response {
   id: string;
   project_id: string;

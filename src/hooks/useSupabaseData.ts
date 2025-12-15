@@ -1,4 +1,4 @@
-// src/hooks/useSupabaseData.ts - VERSION AVEC SECTION 6
+// src/hooks/useSupabaseData.ts - VERSION AVEC SECTION 8
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Project } from '../lib/supabase';
@@ -302,6 +302,39 @@ export function useSupabaseData() {
     }
   };
 
+  // Section 8 - Mesure du Succès
+  const saveSection8 = async (data: any) => {
+    if (!project) return;
+
+    try {
+      const { data: section8, error } = await supabase
+        .from('section8_responses')
+        .upsert({
+          project_id: project.id,
+          kpis: data.kpis || {},
+          other_kpi_name: data.other_kpi_name || '',
+          other_kpi_target: data.other_kpi_target || '',
+          validation_methods: data.validation_methods || {},
+          other_validation: data.other_validation || '',
+          kpi_frequency: data.kpi_frequency || '',
+          kpi_responsible: data.kpi_responsible || '',
+          alert_completion_rate: data.alert_completion_rate || '',
+          alert_retention_rate: data.alert_retention_rate || '',
+          alert_satisfaction_score: data.alert_satisfaction_score || ''
+        }, {
+          onConflict: 'project_id'
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return section8;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+      throw err;
+    }
+  };
+
   // Section 14 - Validation & Prochaines Étapes
   const saveSection14 = async (data: any) => {
     if (!project) return;
@@ -542,6 +575,32 @@ export function useSupabaseData() {
           };
         }
 
+        case 8: {
+          const { data: section8, error } = await supabase
+            .from('section8_responses')
+            .select('*')
+            .eq('project_id', project.id)
+            .limit(1);
+
+          if (error) throw error;
+          if (!section8 || section8.length === 0) return null;
+
+          const section8Data = section8[0];
+
+          return {
+            kpis: section8Data.kpis,
+            other_kpi_name: section8Data.other_kpi_name,
+            other_kpi_target: section8Data.other_kpi_target,
+            validation_methods: section8Data.validation_methods,
+            other_validation: section8Data.other_validation,
+            kpi_frequency: section8Data.kpi_frequency,
+            kpi_responsible: section8Data.kpi_responsible,
+            alert_completion_rate: section8Data.alert_completion_rate,
+            alert_retention_rate: section8Data.alert_retention_rate,
+            alert_satisfaction_score: section8Data.alert_satisfaction_score
+          };
+        }
+
         case 14: {
           const { data: section14, error } = await supabase
             .from('section14_responses')
@@ -582,6 +641,7 @@ export function useSupabaseData() {
     saveSection5,
     saveSection6,
     saveSection7,
+    saveSection8,
     saveSection14,
     loadSectionData
   };

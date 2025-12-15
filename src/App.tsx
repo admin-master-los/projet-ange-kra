@@ -11,6 +11,7 @@ import Section4 from './components/sections/Section4';
 import Section5 from './components/sections/Section5';
 import Section6 from './components/sections/Section6';
 import Section7 from './components/sections/Section7';
+import Section8 from './components/sections/Section8';
 import Section14 from './components/sections/Section14';
 import ProgressIndicator from './components/ProgressIndicator';
 
@@ -22,7 +23,7 @@ const SECTIONS: Section[] = [
   { id: 5, title: "MODÈLE ÉCONOMIQUE", component: Section5 },
   { id: 6, title: "LANCEMENT & PRIORITÉS", component: Section6 },
   { id: 7, title: "RESSOURCES & CONTRAINTES", component: Section7 },
-  { id: 8, title: "MESURE DU SUCCÈS", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
+  { id: 8, title: "MESURE DU SUCCÈS", component: Section8 },
   { id: 9, title: "DESIGN & IDENTITÉ VISUELLE", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
   { id: 10, title: "PLATEFORMES & TECHNOLOGIES", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
   { id: 11, title: "PARTENARIATS & ÉCOSYSTÈME", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
@@ -46,6 +47,7 @@ function App() {
     saveSection5,
     saveSection6,
     saveSection7,
+    saveSection8,
     saveSection14,
     loadSectionData 
   } = useSupabaseData();
@@ -78,7 +80,7 @@ function App() {
     if (!project) return;
     
     try {
-      const sectionsToLoad = [1, 2, 3, 4, 5, 6, 7, 14];
+      const sectionsToLoad = [1, 2, 3, 4, 5, 6, 7, 8, 14];
       const loadedData: FormData = {};
       
       for (const sectionId of sectionsToLoad) {
@@ -127,6 +129,9 @@ function App() {
           break;
         case 7:
           await saveSection7(data);
+          break;
+        case 8:
+          await saveSection8(data);
           break;
         case 14:
           await saveSection14(data);
