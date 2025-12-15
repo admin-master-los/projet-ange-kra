@@ -1,21 +1,13 @@
+// src/hooks/useSupabaseData.ts - VERSION MISE À JOUR
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import type { 
-  Project, 
-  Section1Response, 
-  Section2Response, 
-  Section3Response, 
-  Section14Response,
-  Persona,
-  SuccessMetric 
-} from '../lib/supabase';
+import type { Project } from '../lib/supabase';
 
 export function useSupabaseData() {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Charger ou créer un projet par défaut
   useEffect(() => {
     loadOrCreateProject();
   }, []);
@@ -24,7 +16,6 @@ export function useSupabaseData() {
     try {
       setLoading(true);
       
-      // Chercher un projet existant
       const { data: projects, error: fetchError } = await supabase
         .from('projects')
         .select('*')
@@ -36,7 +27,6 @@ export function useSupabaseData() {
       if (projects && projects.length > 0) {
         setProject(projects[0]);
       } else {
-        // Créer un nouveau projet
         const { data: newProject, error: createError } = await supabase
           .from('projects')
           .insert({
@@ -62,7 +52,6 @@ export function useSupabaseData() {
     if (!project) return;
 
     try {
-      // Sauvegarder les données principales de la section 1
       const { data: section1, error: section1Error } = await supabase
         .from('section1_responses')
         .upsert({
@@ -79,15 +68,9 @@ export function useSupabaseData() {
 
       if (section1Error) throw section1Error;
 
-      // Sauvegarder les personas
       if (data.personas && data.personas.length > 0) {
-        // Supprimer les anciens personas
-        await supabase
-          .from('personas')
-          .delete()
-          .eq('section1_id', section1.id);
+        await supabase.from('personas').delete().eq('section1_id', section1.id);
 
-        // Insérer les nouveaux personas
         const personasToInsert = data.personas.map((persona: any) => ({
           section1_id: section1.id,
           name: persona.name || '',
@@ -104,15 +87,9 @@ export function useSupabaseData() {
         if (personasError) throw personasError;
       }
 
-      // Sauvegarder les métriques de succès
       if (data.successMetrics && data.successMetrics.length > 0) {
-        // Supprimer les anciennes métriques
-        await supabase
-          .from('success_metrics')
-          .delete()
-          .eq('section1_id', section1.id);
+        await supabase.from('success_metrics').delete().eq('section1_id', section1.id);
 
-        // Insérer les nouvelles métriques
         const metricsToInsert = data.successMetrics.map((metric: any) => ({
           section1_id: section1.id,
           metric_type: metric.type,
@@ -168,7 +145,7 @@ export function useSupabaseData() {
     }
   };
 
-  // Section 3 - Modules & Fonctionnalités
+  // Section 3 - Modules & Fonctionnalités (MISE À JOUR COMPLÈTE)
   const saveSection3 = async (data: any) => {
     if (!project) return;
 
@@ -177,9 +154,31 @@ export function useSupabaseData() {
         .from('section3_responses')
         .upsert({
           project_id: project.id,
+          // Module A
           module_a_features: data.moduleA?.features || {},
           module_a_other_features: data.moduleA?.otherFeatures || '',
-          module_b_ideas: data.moduleB?.ideas || ''
+          // Module B
+          module_b_features: data.moduleB?.features || {},
+          module_b_sources: data.moduleB?.sources || [],
+          module_b_launch_formations: data.moduleB?.launchFormations || '',
+          module_b_avg_duration: data.moduleB?.avgDuration || '',
+          module_b_pricing_model: data.moduleB?.pricingModel || '',
+          // Module C
+          module_c_features: data.moduleC?.features || {},
+          module_c_cvboost_inspiration: data.moduleC?.cvboostInspiration || '',
+          // Module D
+          module_d_features: data.moduleD?.features || {},
+          module_d_partnerships: data.moduleD?.partnerships || '',
+          module_d_partner_count: data.moduleD?.partnerCount || '',
+          // Module E
+          module_e_features: data.moduleE?.features || {},
+          // Module F
+          module_f_features: data.moduleF?.features || {},
+          module_f_gamification_level: data.moduleF?.gamificationLevel || '',
+          // Module G
+          module_g_features: data.moduleG?.features || {},
+          // Fonctionnalités supplémentaires
+          additional_features: data.additionalFeatures || ''
         }, {
           onConflict: 'project_id'
         })
@@ -239,7 +238,6 @@ export function useSupabaseData() {
 
           const section1Data = section1[0];
 
-          // Charger les personas
           const { data: personas, error: personasError } = await supabase
             .from('personas')
             .select('*')
@@ -247,7 +245,6 @@ export function useSupabaseData() {
 
           if (personasError) throw personasError;
 
-          // Charger les métriques
           const { data: metrics, error: metricsError } = await supabase
             .from('success_metrics')
             .select('*')
@@ -328,8 +325,32 @@ export function useSupabaseData() {
               otherFeatures: section3Data.module_a_other_features
             },
             moduleB: {
-              ideas: section3Data.module_b_ideas
-            }
+              features: section3Data.module_b_features,
+              sources: section3Data.module_b_sources,
+              launchFormations: section3Data.module_b_launch_formations,
+              avgDuration: section3Data.module_b_avg_duration,
+              pricingModel: section3Data.module_b_pricing_model
+            },
+            moduleC: {
+              features: section3Data.module_c_features,
+              cvboostInspiration: section3Data.module_c_cvboost_inspiration
+            },
+            moduleD: {
+              features: section3Data.module_d_features,
+              partnerships: section3Data.module_d_partnerships,
+              partnerCount: section3Data.module_d_partner_count
+            },
+            moduleE: {
+              features: section3Data.module_e_features
+            },
+            moduleF: {
+              features: section3Data.module_f_features,
+              gamificationLevel: section3Data.module_f_gamification_level
+            },
+            moduleG: {
+              features: section3Data.module_g_features
+            },
+            additionalFeatures: section3Data.additional_features
           };
         }
 
