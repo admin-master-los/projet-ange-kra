@@ -9,6 +9,8 @@ import Section2 from './components/sections/Section2';
 import Section3 from './components/sections/Section3';
 import Section4 from './components/sections/Section4';
 import Section5 from './components/sections/Section5';
+import Section6 from './components/sections/Section6';
+import Section7 from './components/sections/Section7';
 import Section14 from './components/sections/Section14';
 import ProgressIndicator from './components/ProgressIndicator';
 
@@ -18,8 +20,8 @@ const SECTIONS: Section[] = [
   { id: 3, title: "MODULES & FONCTIONNALITÉS", component: Section3 },
   { id: 4, title: "EXPÉRIENCE UTILISATEUR", component: Section4 },
   { id: 5, title: "MODÈLE ÉCONOMIQUE", component: Section5 },
-  { id: 6, title: "LANCEMENT & PRIORITÉS", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
-  { id: 7, title: "RESSOURCES & CONTRAINTES", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
+  { id: 6, title: "LANCEMENT & PRIORITÉS", component: Section6 },
+  { id: 7, title: "RESSOURCES & CONTRAINTES", component: Section7 },
   { id: 8, title: "MESURE DU SUCCÈS", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
   { id: 9, title: "DESIGN & IDENTITÉ VISUELLE", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
   { id: 10, title: "PLATEFORMES & TECHNOLOGIES", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
@@ -42,6 +44,8 @@ function App() {
     saveSection3,
     saveSection4,
     saveSection5,
+    saveSection6,
+    saveSection7,
     saveSection14,
     loadSectionData 
   } = useSupabaseData();
@@ -74,7 +78,7 @@ function App() {
     if (!project) return;
     
     try {
-      const sectionsToLoad = [1, 2, 3, 4, 5, 14];
+      const sectionsToLoad = [1, 2, 3, 4, 5, 6, 7, 14];
       const loadedData: FormData = {};
       
       for (const sectionId of sectionsToLoad) {
@@ -117,6 +121,12 @@ function App() {
           break;
         case 5:
           await saveSection5(data);
+          break;
+        case 6: 
+          await saveSection6(data);
+          break;
+        case 7:
+          await saveSection7(data);
           break;
         case 14:
           await saveSection14(data);

@@ -1,4 +1,4 @@
-// src/hooks/useSupabaseData.ts - VERSION COMPLÈTE AVEC SECTION 4
+// src/hooks/useSupabaseData.ts - VERSION AVEC SECTION 6
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Project } from '../lib/supabase';
@@ -234,6 +234,74 @@ export function useSupabaseData() {
     }
   };
 
+  // Section 6 - Lancement & Priorités
+  const saveSection6 = async (data: any) => {
+    if (!project) return;
+
+    try {
+      const { data: section6, error } = await supabase
+        .from('section6_responses')
+        .upsert({
+          project_id: project.id,
+          mvp_features: data.mvp_features || [],
+          mvp_custom_0: data.mvp_custom_0 || '',
+          mvp_custom_1: data.mvp_custom_1 || '',
+          mvp_custom_2: data.mvp_custom_2 || '',
+          mvp_rationale: data.mvp_rationale || '',
+          phases: data.phases || {},
+          launch_contents: data.launch_contents || {},
+          content_creators: data.content_creators || [],
+          other_content_creator: data.other_content_creator || ''
+        }, {
+          onConflict: 'project_id'
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return section6;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+      throw err;
+    }
+  };
+
+  // Section 7 - Ressources & Contraintes
+  const saveSection7 = async (data: any) => {
+    if (!project) return;
+
+    try {
+      const { data: section7, error } = await supabase
+        .from('section7_responses')
+        .upsert({
+          project_id: project.id,
+          budget_range: data.budget_range || '',
+          budget_allocation: data.budget_allocation || {},
+          timeline: data.timeline || '',
+          deadline_date: data.deadline_date || null,
+          deadline_reason: data.deadline_reason || '',
+          team_size: data.team_size || '',
+          team_size_details: data.team_size_details || '',
+          internal_skills: data.internal_skills || [],
+          other_internal_skills: data.other_internal_skills || '',
+          external_skills: data.external_skills || [],
+          other_external_skills: data.other_external_skills || '',
+          technical_constraints: data.technical_constraints || [],
+          other_constraints: data.other_constraints || ''
+        }, {
+          onConflict: 'project_id'
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return section7;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+      throw err;
+    }
+  };
+
   // Section 14 - Validation & Prochaines Étapes
   const saveSection14 = async (data: any) => {
     if (!project) return;
@@ -420,6 +488,60 @@ export function useSupabaseData() {
           };
         }
 
+        case 6: {
+          const { data: section6, error } = await supabase
+            .from('section6_responses')
+            .select('*')
+            .eq('project_id', project.id)
+            .limit(1);
+
+          if (error) throw error;
+          if (!section6 || section6.length === 0) return null;
+
+          const section6Data = section6[0];
+
+          return {
+            mvp_features: section6Data.mvp_features,
+            mvp_custom_0: section6Data.mvp_custom_0,
+            mvp_custom_1: section6Data.mvp_custom_1,
+            mvp_custom_2: section6Data.mvp_custom_2,
+            mvp_rationale: section6Data.mvp_rationale,
+            phases: section6Data.phases,
+            launch_contents: section6Data.launch_contents,
+            content_creators: section6Data.content_creators,
+            other_content_creator: section6Data.other_content_creator
+          };
+        }
+
+        case 7: {
+          const { data: section7, error } = await supabase
+            .from('section7_responses')
+            .select('*')
+            .eq('project_id', project.id)
+            .limit(1);
+
+          if (error) throw error;
+          if (!section7 || section7.length === 0) return null;
+
+          const section7Data = section7[0];
+
+          return {
+            budget_range: section7Data.budget_range,
+            budget_allocation: section7Data.budget_allocation,
+            timeline: section7Data.timeline,
+            deadline_date: section7Data.deadline_date,
+            deadline_reason: section7Data.deadline_reason,
+            team_size: section7Data.team_size,
+            team_size_details: section7Data.team_size_details,
+            internal_skills: section7Data.internal_skills,
+            other_internal_skills: section7Data.other_internal_skills,
+            external_skills: section7Data.external_skills,
+            other_external_skills: section7Data.other_external_skills,
+            technical_constraints: section7Data.technical_constraints,
+            other_constraints: section7Data.other_constraints
+          };
+        }
+
         case 14: {
           const { data: section14, error } = await supabase
             .from('section14_responses')
@@ -458,6 +580,8 @@ export function useSupabaseData() {
     saveSection3,
     saveSection4,
     saveSection5,
+    saveSection6,
+    saveSection7,
     saveSection14,
     loadSectionData
   };

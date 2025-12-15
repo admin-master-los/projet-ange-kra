@@ -124,6 +124,72 @@ export interface Section5Response {
   updated_at: string;
 }
 
+export interface Section6Response {
+  id: string;
+  project_id: string;
+  // 6.1 MVP
+  mvp_features: string[];
+  mvp_custom_0: string;
+  mvp_custom_1: string;
+  mvp_custom_2: string;
+  mvp_rationale: string;
+  // 6.2 Phasage
+  phases: {
+    v1?: {
+      features?: string;
+      target_users?: string;
+    };
+    v2?: {
+      additions?: string;
+    };
+    v3?: {
+      additions?: string;
+    };
+  };
+  // 6.3 Contenus au lancement
+  launch_contents: {
+    fiches_metiers?: string;
+    formations?: string;
+    heures_videos?: string;
+    offres_emploi?: string;
+    temoignages?: string;
+  };
+  content_creators: string[];
+  other_content_creator: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Section7Response {
+  id: string;
+  project_id: string;
+  // 7.1 Budget
+  budget_range: string;
+  budget_allocation: {
+    design?: string;
+    development?: string;
+    content?: string;
+    marketing?: string;
+    other?: string;
+  };
+  // 7.2 Délais
+  timeline: string;
+  deadline_date: string | null;
+  deadline_reason: string;
+  // 7.3 Équipe
+  team_size: string;
+  team_size_details: string;
+  internal_skills: string[];
+  other_internal_skills: string;
+  external_skills: string[];
+  other_external_skills: string;
+  // 7.4 Contraintes Techniques
+  technical_constraints: string[];
+  other_constraints: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Section14Response {
   id: string;
   project_id: string;
