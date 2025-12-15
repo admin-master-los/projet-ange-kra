@@ -401,6 +401,72 @@ const saveSection10 = async (data: any) => {
   }
 };
 
+// Section 11 - Partenariats & Écosystème
+const saveSection11 = async (data: any) => {
+  if (!project) return;
+
+  try {
+    const { data: section11, error } = await supabase
+      .from('section11_responses')
+      .upsert({
+        project_id: project.id,
+        partners: data.partners || [],
+        target_partnerships: data.target_partnerships || '',
+        partnership_approach: data.partnership_approach || '',
+        partnership_value: data.partnership_value || '',
+        partnership_target_12m: data.partnership_target_12m || ''
+      }, {
+        onConflict: 'project_id'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return section11;
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+    throw err;
+  }
+};
+
+// Section 12 - Aspects Légaux & Sécurité
+const saveSection12 = async (data: any) => {
+  if (!project) return;
+
+  try {
+    const { data: section12, error } = await supabase
+      .from('section12_responses')
+      .upsert({
+        project_id: project.id,
+        legal_status: data.legal_status || '',
+        legal_status_other: data.legal_status_other || '',
+        company_name: data.company_name || '',
+        registration_number: data.registration_number || '',
+        creation_date: data.creation_date || null,
+        headquarters: data.headquarters || '',
+        legal_aspects: data.legal_aspects || {},
+        legal_aspect_notes: data.legal_aspect_notes || {},
+        other_legal_aspects: data.other_legal_aspects || '',
+        legal_assistance: data.legal_assistance || '',
+        legal_assistance_needs: data.legal_assistance_needs || '',
+        legal_counsel_name: data.legal_counsel_name || '',
+        data_hosting: data.data_hosting || '',
+        security_measures: data.security_measures || [],
+        other_security_measures: data.other_security_measures || ''
+      }, {
+        onConflict: 'project_id'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return section12;
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+    throw err;
+  }
+};
+
   // Section 14 - Validation & Prochaines Étapes
   const saveSection14 = async (data: any) => {
     if (!project) return;
@@ -716,7 +782,38 @@ const saveSection10 = async (data: any) => {
 	    performance_requirements: section10Data.performance_requirements
 	  };
 	}
+	
+	case 12: {
+	  const { data: section12, error } = await supabase
+	    .from('section12_responses')
+	    .select('*')
+	    .eq('project_id', project.id)
+	    .limit(1);
 
+	  if (error) throw error;
+	  if (!section12 || section12.length === 0) return null;
+
+	  const section12Data = section12[0];
+
+	  return {
+	    legal_status: section12Data.legal_status,
+	    legal_status_other: section12Data.legal_status_other,
+	    company_name: section12Data.company_name,
+	    registration_number: section12Data.registration_number,
+	    creation_date: section12Data.creation_date,
+	    headquarters: section12Data.headquarters,
+	    legal_aspects: section12Data.legal_aspects,
+	    legal_aspect_notes: section12Data.legal_aspect_notes,
+	    other_legal_aspects: section12Data.other_legal_aspects,
+	    legal_assistance: section12Data.legal_assistance,
+	    legal_assistance_needs: section12Data.legal_assistance_needs,
+	    legal_counsel_name: section12Data.legal_counsel_name,
+	    data_hosting: section12Data.data_hosting,
+	    security_measures: section12Data.security_measures,
+	    other_security_measures: section12Data.other_security_measures
+	  };
+	}
+	
         case 14: {
           const { data: section14, error } = await supabase
             .from('section14_responses')
@@ -760,6 +857,8 @@ const saveSection10 = async (data: any) => {
     saveSection8,
     saveSection9,
     saveSection10,
+    saveSection11,
+    saveSection12,
     saveSection14,
     loadSectionData
   };

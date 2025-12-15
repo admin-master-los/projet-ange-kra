@@ -264,6 +264,51 @@ export interface Section10Response {
   updated_at: string;
 }
 
+export interface Section11Response {
+  id: string;
+  project_id: string;
+  // 11.1 Partenaires actuels
+  partners: Array<{
+    type: string;
+    name: string;
+    role: string;
+    status: string;
+  }>;
+  // 11.2 Partenaires cibles
+  target_partnerships: string;
+  partnership_approach: string;
+  partnership_value: string;
+  partnership_target_12m: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Section12Response {
+  id: string;
+  project_id: string;
+  // 12.1 Statut Juridique
+  legal_status: string;
+  legal_status_other: string;
+  company_name: string;
+  registration_number: string;
+  creation_date: string | null;
+  headquarters: string;
+  // 12.2 Conformité
+  legal_aspects: Record<string, boolean>;
+  legal_aspect_notes: Record<string, string>;
+  other_legal_aspects: string;
+  // 12.3 Accompagnement Juridique
+  legal_assistance: string;
+  legal_assistance_needs: string;
+  legal_counsel_name: string;
+  // 12.4 Sécurité des Données
+  data_hosting: string;
+  security_measures: string[];
+  other_security_measures: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Section14Response {
   id: string;
   project_id: string;

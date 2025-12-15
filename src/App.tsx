@@ -14,6 +14,8 @@ import Section7 from './components/sections/Section7';
 import Section8 from './components/sections/Section8';
 import Section9 from './components/sections/Section9';
 import Section10 from './components/sections/Section10';
+import Section11 from './components/sections/Section11';
+import Section12 from './components/sections/Section12';
 import Section14 from './components/sections/Section14';
 import ProgressIndicator from './components/ProgressIndicator';
 
@@ -28,8 +30,8 @@ const SECTIONS: Section[] = [
   { id: 8, title: "MESURE DU SUCCÈS", component: Section8 },
   { id: 9, title: "DESIGN & IDENTITÉ VISUELLE", component: Section9 },
   { id: 10, title: "PLATEFORMES & TECHNOLOGIES", component: Section10 },
-  { id: 11, title: "PARTENARIATS & ÉCOSYSTÈME", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
-  { id: 12, title: "ASPECTS LÉGAUX & SÉCURITÉ", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
+  { id: 11, title: "PARTENARIATS & ÉCOSYSTÈME", component: Section11 },
+  { id: 12, title: "ASPECTS LÉGAUX & SÉCURITÉ", component: Section12 },
   { id: 13, title: "CAPITALISATION SUR L'EXISTANT CIFOP", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
   { id: 14, title: "VALIDATION & PROCHAINES ÉTAPES", component: Section14 }
 ];
@@ -52,6 +54,8 @@ function App() {
     saveSection8,
     saveSection9,
     saveSection10,
+    saveSection11,
+    saveSection12,
     saveSection14,
     loadSectionData 
   } = useSupabaseData();
@@ -84,7 +88,7 @@ function App() {
     if (!project) return;
     
     try {
-      const sectionsToLoad = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14];
+      const sectionsToLoad = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14];
       const loadedData: FormData = {};
       
       for (const sectionId of sectionsToLoad) {
@@ -143,6 +147,12 @@ function App() {
         case 10:
 	  await saveSection10(data);
 	  break;
+        case 11: 
+          await saveSection11(data);
+          break;
+        case 12:  
+          await saveSection12(data);
+          break;
         case 14:
           await saveSection14(data);
           break;
