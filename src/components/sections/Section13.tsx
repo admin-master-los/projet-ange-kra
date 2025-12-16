@@ -343,7 +343,7 @@ const Section13: React.FC<Section13Props> = ({ data = {}, onUpdate }) => {
         </div>
       </div>
 
-      // ÉTAPE 2 : Code à ajouter après la section 13.2 dans Section13.tsx
+      
 
       {/* 13.3 Base d'Apprenants & Alumni */}
       <div className="space-y-6">
@@ -642,7 +642,7 @@ const Section13: React.FC<Section13Props> = ({ data = {}, onUpdate }) => {
         </div>
       </div>
       
-      // ÉTAPE 3 : Code à ajouter après le résumé de l'Étape 2 dans Section13.tsx
+  
 
       {/* 13.5 Équipe & Formateurs */}
       <div className="space-y-6">
@@ -1097,7 +1097,7 @@ const Section13: React.FC<Section13Props> = ({ data = {}, onUpdate }) => {
         </div>
       </div>
       
-      // ÉTAPE 4 : Code à ajouter après le résumé de l'Étape 3 dans Section13.tsx
+
 
       {/* 13.7 Relation Plateforme ↔ CIFOP */}
       <div className="space-y-6">
@@ -1440,7 +1440,7 @@ const Section13: React.FC<Section13Props> = ({ data = {}, onUpdate }) => {
       
       
       
-// ÉTAPE 5 : Code à ajouter après le résumé de l'Étape 4 dans Section13.tsx
+
 
       {/* 13.9 Objectifs Spécifiques de Digitalisation */}
       <div className="space-y-6">
