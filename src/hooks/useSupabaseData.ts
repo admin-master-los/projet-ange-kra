@@ -429,6 +429,7 @@ const saveSection11 = async (data: any) => {
   }
 };
 
+
 // Section 12 - Aspects Légaux & Sécurité
 const saveSection12 = async (data: any) => {
   if (!project) return;
@@ -461,6 +462,97 @@ const saveSection12 = async (data: any) => {
 
     if (error) throw error;
     return section12;
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
+    throw err;
+  }
+};
+
+// Section 13 - Capitalisation sur l'Existant CIFOP
+const saveSection13 = async (data: any) => {
+  if (!project) return;
+
+  try {
+    const { data: section13, error } = await supabase
+      .from('section13_responses')
+      .upsert({
+        project_id: project.id,
+        // 13.1
+        formations_par_an: data.formations_par_an || '',
+        formation_frequency: data.formation_frequency || '',
+        formation_frequency_other: data.formation_frequency_other || '',
+        formation_formats: data.formation_formats || [],
+        formation_format_other: data.formation_format_other || '',
+        // 13.2
+        thematiques_couvertes: data.thematiques_couvertes || {},
+        autre_thematique: data.autre_thematique || '',
+        contenus_digitalisables: data.contenus_digitalisables || {},
+        etat_contenus: data.etat_contenus || '',
+        etat_contenus_precision: data.etat_contenus_precision || '',
+        // 13.3
+        apprenants_total: data.apprenants_total || '',
+        apprenants_12mois: data.apprenants_12mois || '',
+        base_donnees: data.base_donnees || '',
+        infos_disponibles: data.infos_disponibles || [],
+        autres_infos_disponibles: data.autres_infos_disponibles || '',
+        contact_alumni: data.contact_alumni || '',
+        // 13.4
+        taux_insertion: data.taux_insertion || '',
+        success_stories: data.success_stories || '',
+        success_stories_exemples: data.success_stories_exemples || [],
+        // 13.5
+        formateurs_permanents: data.formateurs_permanents || '',
+        formateurs_vacataires: data.formateurs_vacataires || '',
+        formateurs_externes: data.formateurs_externes || '',
+        profil_formateurs: data.profil_formateurs || [],
+        formateurs_digital: data.formateurs_digital || '',
+        formateurs_digital_nombre: data.formateurs_digital_nombre || '',
+        // 13.6
+        partenaires_entreprises: data.partenaires_entreprises || '',
+        partenaires_entreprises_nombre: data.partenaires_entreprises_nombre || '',
+        partenaires_entreprises_liste: data.partenaires_entreprises_liste || [],
+        partenaires_certification: data.partenaires_certification || '',
+        partenaires_certification_details: data.partenaires_certification_details || '',
+        partenaires_centres: data.partenaires_centres || '',
+        partenaires_centres_details: data.partenaires_centres_details || '',
+        partenaires_publics: data.partenaires_publics || [],
+        partenaires_publics_autre: data.partenaires_publics_autre || '',
+        aucun_partenariat_public: data.aucun_partenariat_public || false,
+        partenaires_bailleurs: data.partenaires_bailleurs || '',
+        partenaires_bailleurs_details: data.partenaires_bailleurs_details || '',
+        // 13.7
+        relation_plateforme: data.relation_plateforme || '',
+        relation_plateforme_autre: data.relation_plateforme_autre || '',
+        nom_plateforme: data.nom_plateforme || '',
+        nom_plateforme_nouveau: data.nom_plateforme_nouveau || '',
+        gouvernance: data.gouvernance || '',
+        gouvernance_equipe_taille: data.gouvernance_equipe_taille || '',
+        // 13.8
+        forces_cifop: data.forces_cifop || [],
+        forces_cifop_autre: data.forces_cifop_autre || '',
+        amplification_forces: data.amplification_forces || '',
+        matrice_forces: data.matrice_forces || {},
+        // 13.9
+        motivations_digitalisation: data.motivations_digitalisation || [],
+        motivation_autre: data.motivation_autre || '',
+        metrique_prioritaire: data.metrique_prioritaire || '',
+        metrique_objectif: data.metrique_objectif || '',
+        metrique_autre: data.metrique_autre || '',
+        // 13.10
+        strategie_transition: data.strategie_transition || '',
+        strategie_transition_autre: data.strategie_transition_autre || '',
+        masterclass_digital: data.masterclass_digital || '',
+        masterclass_digital_autre: data.masterclass_digital_autre || '',
+        presentiel_focus: data.presentiel_focus || [],
+        presentiel_focus_autre: data.presentiel_focus_autre || ''
+      }, {
+        onConflict: 'project_id'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return section13;
   } catch (err) {
     setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde');
     throw err;
@@ -783,6 +875,27 @@ const saveSection12 = async (data: any) => {
 	  };
 	}
 	
+	case 11: {
+	  const { data: section11, error } = await supabase
+	    .from('section11_responses')
+	    .select('*')
+	    .eq('project_id', project.id)
+	    .limit(1);
+
+	  if (error) throw error;
+	  if (!section11 || section11.length === 0) return null;
+
+	  const section11Data = section11[0];
+
+	  return {
+	    partners: section11Data.partners,
+	    target_partnerships: section11Data.target_partnerships,
+	    partnership_approach: section11Data.partnership_approach,
+	    partnership_value: section11Data.partnership_value,
+	    partnership_target_12m: section11Data.partnership_target_12m
+	  };
+	}
+	
 	case 12: {
 	  const { data: section12, error } = await supabase
 	    .from('section12_responses')
@@ -813,6 +926,90 @@ const saveSection12 = async (data: any) => {
 	    other_security_measures: section12Data.other_security_measures
 	  };
 	}
+	
+	case 13: {
+          const { data: section13, error } = await supabase
+            .from('section13_responses')
+            .select('*')
+            .eq('project_id', project.id)
+            .limit(1);
+
+          if (error) throw error;
+          if (!section13 || section13.length === 0) return null;
+
+          const section13Data = section13[0];
+
+          return {
+            // 13.1
+            formations_par_an: section13Data.formations_par_an,
+            formation_frequency: section13Data.formation_frequency,
+            formation_frequency_other: section13Data.formation_frequency_other,
+            formation_formats: section13Data.formation_formats,
+            formation_format_other: section13Data.formation_format_other,
+            // 13.2
+            thematiques_couvertes: section13Data.thematiques_couvertes,
+            autre_thematique: section13Data.autre_thematique,
+            contenus_digitalisables: section13Data.contenus_digitalisables,
+            etat_contenus: section13Data.etat_contenus,
+            etat_contenus_precision: section13Data.etat_contenus_precision,
+            // 13.3
+            apprenants_total: section13Data.apprenants_total,
+            apprenants_12mois: section13Data.apprenants_12mois,
+            base_donnees: section13Data.base_donnees,
+            infos_disponibles: section13Data.infos_disponibles,
+            autres_infos_disponibles: section13Data.autres_infos_disponibles,
+            contact_alumni: section13Data.contact_alumni,
+            // 13.4
+            taux_insertion: section13Data.taux_insertion,
+            success_stories: section13Data.success_stories,
+            success_stories_exemples: section13Data.success_stories_exemples,
+            // 13.5
+            formateurs_permanents: section13Data.formateurs_permanents,
+            formateurs_vacataires: section13Data.formateurs_vacataires,
+            formateurs_externes: section13Data.formateurs_externes,
+            profil_formateurs: section13Data.profil_formateurs,
+            formateurs_digital: section13Data.formateurs_digital,
+            formateurs_digital_nombre: section13Data.formateurs_digital_nombre,
+            // 13.6
+            partenaires_entreprises: section13Data.partenaires_entreprises,
+            partenaires_entreprises_nombre: section13Data.partenaires_entreprises_nombre,
+            partenaires_entreprises_liste: section13Data.partenaires_entreprises_liste,
+            partenaires_certification: section13Data.partenaires_certification,
+            partenaires_certification_details: section13Data.partenaires_certification_details,
+            partenaires_centres: section13Data.partenaires_centres,
+            partenaires_centres_details: section13Data.partenaires_centres_details,
+            partenaires_publics: section13Data.partenaires_publics,
+            partenaires_publics_autre: section13Data.partenaires_publics_autre,
+            aucun_partenariat_public: section13Data.aucun_partenariat_public,
+            partenaires_bailleurs: section13Data.partenaires_bailleurs,
+            partenaires_bailleurs_details: section13Data.partenaires_bailleurs_details,
+            // 13.7
+            relation_plateforme: section13Data.relation_plateforme,
+            relation_plateforme_autre: section13Data.relation_plateforme_autre,
+            nom_plateforme: section13Data.nom_plateforme,
+            nom_plateforme_nouveau: section13Data.nom_plateforme_nouveau,
+            gouvernance: section13Data.gouvernance,
+            gouvernance_equipe_taille: section13Data.gouvernance_equipe_taille,
+            // 13.8
+            forces_cifop: section13Data.forces_cifop,
+            forces_cifop_autre: section13Data.forces_cifop_autre,
+            amplification_forces: section13Data.amplification_forces,
+            matrice_forces: section13Data.matrice_forces,
+            // 13.9
+            motivations_digitalisation: section13Data.motivations_digitalisation,
+            motivation_autre: section13Data.motivation_autre,
+            metrique_prioritaire: section13Data.metrique_prioritaire,
+            metrique_objectif: section13Data.metrique_objectif,
+            metrique_autre: section13Data.metrique_autre,
+            // 13.10
+            strategie_transition: section13Data.strategie_transition,
+            strategie_transition_autre: section13Data.strategie_transition_autre,
+            masterclass_digital: section13Data.masterclass_digital,
+            masterclass_digital_autre: section13Data.masterclass_digital_autre,
+            presentiel_focus: section13Data.presentiel_focus,
+            presentiel_focus_autre: section13Data.presentiel_focus_autre
+          };
+        }
 	
         case 14: {
           const { data: section14, error } = await supabase
@@ -859,6 +1056,7 @@ const saveSection12 = async (data: any) => {
     saveSection10,
     saveSection11,
     saveSection12,
+    saveSection13,
     saveSection14,
     loadSectionData
   };

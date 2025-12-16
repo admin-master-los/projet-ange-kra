@@ -309,6 +309,84 @@ export interface Section12Response {
   updated_at: string;
 }
 
+export interface Section13Response {
+  id: string;
+  project_id: string;
+  // 13.1 Formations & Masterclass Actuelles
+  formations_par_an: string;
+  formation_frequency: string;
+  formation_frequency_other: string;
+  formation_formats: string[];
+  formation_format_other: string;
+  // 13.2 Thématiques & Contenus Existants
+  thematiques_couvertes: Record<string, {
+    checked: boolean;
+    details: string;
+  }>;
+  autre_thematique: string;
+  contenus_digitalisables: Record<string, Record<string, boolean>>;
+  etat_contenus: string;
+  etat_contenus_precision: string;
+  // 13.3 Base d'Apprenants & Alumni
+  apprenants_total: string;
+  apprenants_12mois: string;
+  base_donnees: string;
+  infos_disponibles: string[];
+  autres_infos_disponibles: string;
+  contact_alumni: string;
+  // 13.4 Résultats & Impact
+  taux_insertion: string;
+  success_stories: string;
+  success_stories_exemples: string[];
+  // 13.5 Équipe & Formateurs
+  formateurs_permanents: string;
+  formateurs_vacataires: string;
+  formateurs_externes: string;
+  profil_formateurs: string[];
+  formateurs_digital: string;
+  formateurs_digital_nombre: string;
+  // 13.6 Partenariats Existants
+  partenaires_entreprises: string;
+  partenaires_entreprises_nombre: string;
+  partenaires_entreprises_liste: string[];
+  partenaires_certification: string;
+  partenaires_certification_details: string;
+  partenaires_centres: string;
+  partenaires_centres_details: string;
+  partenaires_publics: string[];
+  partenaires_publics_autre: string;
+  aucun_partenariat_public: boolean;
+  partenaires_bailleurs: string;
+  partenaires_bailleurs_details: string;
+  // 13.7 Relation Plateforme ↔ CIFOP
+  relation_plateforme: string;
+  relation_plateforme_autre: string;
+  nom_plateforme: string;
+  nom_plateforme_nouveau: string;
+  gouvernance: string;
+  gouvernance_equipe_taille: string;
+  // 13.8 Avantages Concurrentiels
+  forces_cifop: string[];
+  forces_cifop_autre: string;
+  amplification_forces: string;
+  matrice_forces: Record<string, string>;
+  // 13.9 Objectifs de Digitalisation
+  motivations_digitalisation: string[];
+  motivation_autre: string;
+  metrique_prioritaire: string;
+  metrique_objectif: string;
+  metrique_autre: string;
+  // 13.10 Transition Présentiel → Digital
+  strategie_transition: string;
+  strategie_transition_autre: string;
+  masterclass_digital: string;
+  masterclass_digital_autre: string;
+  presentiel_focus: string[];
+  presentiel_focus_autre: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Section14Response {
   id: string;
   project_id: string;

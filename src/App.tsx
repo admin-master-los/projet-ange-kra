@@ -16,6 +16,7 @@ import Section9 from './components/sections/Section9';
 import Section10 from './components/sections/Section10';
 import Section11 from './components/sections/Section11';
 import Section12 from './components/sections/Section12';
+import Section13 from './components/sections/Section13';
 import Section14 from './components/sections/Section14';
 import ProgressIndicator from './components/ProgressIndicator';
 
@@ -32,7 +33,7 @@ const SECTIONS: Section[] = [
   { id: 10, title: "PLATEFORMES & TECHNOLOGIES", component: Section10 },
   { id: 11, title: "PARTENARIATS & ÉCOSYSTÈME", component: Section11 },
   { id: 12, title: "ASPECTS LÉGAUX & SÉCURITÉ", component: Section12 },
-  { id: 13, title: "CAPITALISATION SUR L'EXISTANT CIFOP", component: () => <div className="p-8 text-center text-gray-600">Section en développement...</div> },
+  { id: 13, title: "CAPITALISATION SUR L'EXISTANT CIFOP", component: Section13 },
   { id: 14, title: "VALIDATION & PROCHAINES ÉTAPES", component: Section14 }
 ];
 
@@ -56,6 +57,7 @@ function App() {
     saveSection10,
     saveSection11,
     saveSection12,
+    saveSection13,
     saveSection14,
     loadSectionData 
   } = useSupabaseData();
@@ -88,7 +90,7 @@ function App() {
     if (!project) return;
     
     try {
-      const sectionsToLoad = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14];
+      const sectionsToLoad = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
       const loadedData: FormData = {};
       
       for (const sectionId of sectionsToLoad) {
@@ -151,6 +153,9 @@ function App() {
           await saveSection11(data);
           break;
         case 12:  
+          await saveSection12(data);
+          break;
+        case 13:  
           await saveSection12(data);
           break;
         case 14:
